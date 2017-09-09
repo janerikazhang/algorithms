@@ -22,6 +22,9 @@ public class Sorting {
 
         arr = sorting.bubbleSort(new int[]{33, 55, 22, 11, 55});
         System.out.println(Arrays.toString(arr));
+
+        arr = sorting.mergeSort(new int[]{33, 55, 22, 11, 55}, 0, 4);
+        System.out.println(Arrays.toString(arr));
     }
 
     public int[] insertionSort(int[] arr) {
@@ -121,4 +124,54 @@ public class Sorting {
                 }
         return arr;
     }
+
+    //top down
+    int[] mergeSort(int[] arr, int init, int end) {
+        if (init < end) {
+            int middle = (int)(init + end)/2;
+            mergeSort(arr, init, middle);
+            mergeSort(arr, middle +1, end);
+            merge(arr, init, middle, end);
+        }
+        return arr;
+    }
+
+    int[] merge(int[] arr, int init, int middle, int end) {
+        int[] L = new int[middle - init +1];
+        int[] R = new int[end - middle];
+
+        for (int i=0; i<L.length; i++) {
+            L[i] = arr[init + i];
+        }
+
+        for (int i=0; i<R.length; i++) {
+            R[i] = arr[middle + i + 1];
+        }
+
+        int left = 0;
+        int right = 0;
+        System.out.println("Merge >> Left: " + Arrays.toString(L) + " , Right: " + Arrays.toString(R));
+        for (int i=init; i < end+1; i++) {
+            if (left<L.length && right<R.length) {
+                if (L[left] <= R[right]) {
+                    arr[i] = L[left];
+                    left++;
+                } else {
+                    arr[i] = R[right];
+                    right++;
+                }
+            } else if (left>=L.length) {
+                arr[i] = R[right];
+                right++;
+            } else {
+                arr[i] = L[left];
+                left++;
+            }
+        }
+        return arr;
+    }
+
+    //TODO: bottom up
+
+
 }
