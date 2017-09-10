@@ -15,18 +15,48 @@ public class Tree {
 
         System.out.println("\nPost order tree walk: ");
         tree.postOrderTreeWalk(root);
+
+        Node n = tree.treeMinimun(root.right.right);
+        if (n != null)
+            System.out.println("\nTree mini: " + n.key);
+
+        n = tree.treeSuccessor(root.left.right);
+        if (n != null)
+            System.out.println("\nTree successor: " + n.key);
     }
 
     Node makeTree(Node root, int height) {
         if (height >0) {
             root.left = new Node(root.key + 1);
+            root.left.parent = root;
             root.right = new Node(root.key + 2);
+            root.right.parent = root;
             height--;
             makeTree(root.left, height);
             makeTree(root.right, height);
         }
         return root;
     }
+    Node treeMinimun(Node n) {
+        while(n.left != null) {
+            n = n.left;
+        }
+        return n;
+    }
+
+    Node treeSuccessor(Node n) {
+        if(n.right != null) {
+            return treeMinimun(n.right);
+        }
+
+        Node y = n.parent;
+        while (y != null && n == y.right) {
+            n = y;
+            y = y.parent;
+        }
+        return y;
+    }
+
 
     void inOrderTreeWalk(Node root) {
         if (root != null) {
@@ -53,6 +83,7 @@ public class Tree {
     }
 
     static class Node{
+        Node parent;
         Node left;
         Node right;
         int key;
@@ -60,6 +91,7 @@ public class Tree {
             this.key = key;
             left = null;
             right = null;
+            parent = null;
         }
     }
 }
