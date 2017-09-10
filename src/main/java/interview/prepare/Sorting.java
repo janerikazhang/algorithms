@@ -28,6 +28,9 @@ public class Sorting {
 
         arr = sorting.heapSort(new int[]{33, 55, 22, 11, 55});
         System.out.println(Arrays.toString(arr));
+
+        arr = sorting.quickSort(new int[]{33, 55, 22, 11, 55}, 0, 4);
+        System.out.println(Arrays.toString(arr));
     }
 
     public int[] insertionSort(int[] arr) {
@@ -206,4 +209,31 @@ public class Sorting {
         }
         return arr;
     }
+
+    int[] quickSort(int[] arr, int start, int end) {
+        if (start < end) {
+            int pivot = partition(arr, start, end);
+            quickSort(arr, start, pivot-1);
+            quickSort(arr, pivot+1, end);
+        }
+        return arr;
+    }
+
+    int partition(int[] arr, int start, int end) {
+        int pivot = arr[end];
+        int index = start - 1;
+        for (int i=start; i < end; i++) {
+            if (arr[i] <= pivot) {
+                index++;
+                int temp = arr[index];
+                arr[index] = arr[i];
+                arr[i] = temp;
+            }
+        }
+        int temp = arr[index + 1];
+        arr[index + 1] = arr[end];
+        arr[end] = temp;
+        return index + 1;
+    }
+
 }
