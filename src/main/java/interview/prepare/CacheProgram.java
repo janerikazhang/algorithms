@@ -19,9 +19,13 @@ public class CacheProgram {
     public void putValue(String k, String v) {
         if (cache.size() == size) {
             // cache is full, remove oldest one
-            Store[] sorted = quickSort((Store[])cache.values().toArray(), 0, 99);
-            Store oldest = sorted[99];
-            cache.remove(oldest);
+            Store old = null;
+            for (Store s : cache.values()) {
+                if (old == null || old.timeStamp.after(s.timeStamp)) {
+                    old = s;
+                }
+            }
+            cache.remove(old);
         }
 
         cache.put(k, new Store(v));
