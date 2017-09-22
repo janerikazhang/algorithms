@@ -1,19 +1,23 @@
-function findPoints(i, rangeMin, currentTang, rangeMax, arr) {
+function findCCW(i, c, ccw, arr) {
     var count = 1;
-    for (var j = i + 1; j != i;) {
-        if (j == arr.length) j = 0;
-        var tangValue = arr[j][1]/arr[j][0];
+    // console.log('range from ' + c + ' range to ' + ccw);
+    for (var j = i + 1; j != i && j != arr.length;) {
+        var v = arr[j][1] / arr[j][0];
         var x = arr[j][0] * arr[i][0];
         var y = arr[j][1] * arr[i][1];
-        if ((0 <= currentTang <= 1 &&  x>= 0 ) || (currentTang <= -1 &&  y>= 0)) {
-            if (currentTang <= tangValue && tangValue <= rangeMax) {
-                // console.log('find ' + tanArr[j] + ' point:', arr[j]);
+        if ((0 <= c <= 1 && x >= 0 ) || (c <= -1 && y >= 0)) {
+            if (c <= v && v <= ccw) {
+                // console.log('find point:', arr[j]);
                 count++;
+            } else {
+                break;
             }
-        } else if ((currentTang > 1 && y >= 0) || (-1 <= currentTang <= 0 && x >= 0)) {
-            if (rangeMax >= tangValue || tangValue >= currentTang) {
-                // console.log('find ' + tanArr[j] + ' point:', arr[j]);
+        } else if ((c > 1 && y >= 0) || (-1 <= c <= 0 && x >= 0)) {
+            if (ccw >= v || v >= c) {
+                // console.log('find point:', arr[j]);
                 count++;
+            } else {
+                break;
             }
         }
 
@@ -21,6 +25,38 @@ function findPoints(i, rangeMin, currentTang, rangeMax, arr) {
             j++;
         } else {
             j = 0;
+        }
+    }
+    return count;
+}
+
+function findCW(i, a, b, arr) {
+    var count = 1;
+    // console.log('range from ' + a + ' range to ' + b);
+    for (var j = i - 1; j != i && j >= 0;) {
+        var v = arr[j][1] / arr[j][0];
+        var x = arr[j][0] * arr[i][0];
+        var y = arr[j][1] * arr[i][1];
+        if ((0 <= a <= 1 && x >= 0 ) || (a <= -1 && y >= 0)) {
+            if (a <= v && v <= b) {
+                // console.log('find point:', arr[j]);
+                count++;
+            } else {
+                break;
+            }
+        } else if ((a > 1 && y >= 0) || (-1 <= a <= 0 && x >= 0)) {
+            if (b >= v || v >= a) {
+                // console.log('find point:', arr[j]);
+                count++;
+            } else {
+                break;
+            }
+        }
+
+        if (j > 0) {
+            j--;
+        } else {
+            j = arr.length - 1;
         }
     }
     return count;
@@ -44,7 +80,7 @@ function visiblePoints(points) {
         }
     }
 
-    var sortFunction = function (a, b) {
+    var sortFun = function (a, b) {
         var v1 = a[1] / a[0];
         var v2 = b[1] / b[0];
 
@@ -57,27 +93,39 @@ function visiblePoints(points) {
         return v1 - v2;
     };
 
-    arr1.sort(sortFunction);
-    arr2.sort(sortFunction);
-    arr3.sort(sortFunction);
-    arr4.sort(sortFunction);
+    arr1.sort(sortFun);
+    arr2.sort(sortFun);
+    arr3.sort(sortFun);
+    arr4.sort(sortFun);
 
     var arr = arr1.concat(arr2).concat(arr3).concat(arr4);
+    // console.log('arr ', arr);
     var result = 0;
     for (var i = 0; i < arr.length; i++) {
         var current = arr[i];
-        var currentTang = current[1] / current[0];
+        var currentTang = getPreciseValue(current[1] / current[0]);
         if (current[0] == 0) {
             currentTang = Math.tan(Math.PI / 2);
         }
-        var rangeMax = Math.tan(Math.atan(currentTang) + Math.PI / 4);
-        var rangeMin = Math.tan(Math.atan(currentTang) - Math.PI / 4);
-        var count = findPoints(i, rangeMin, currentTang, rangeMax, arr);
+        var rccw = getPreciseValue(Math.tan(Math.atan(currentTang) + Math.PI / 4));
+        var rcw = getPreciseValue(Math.tan(Math.atan(currentTang) - Math.PI / 4));
+        var count = findCCW(i, currentTang, rccw, arr);
+        if (count > result) {
+            result = count;
+            // console.log('result ' + result);
+        }
+
+        var count = findCW(i, rcw, currentTang, arr);
         if (count > result) {
             result = count;
             // console.log('result ' + result);
         }
     }
-
     return result;
+}
+
+function getPreciseValue(rawX) {
+    roundedX = Math.round(100000000 * rawX) / 100000000;
+    resultStr = roundedX.toFixed(8);
+    return resultStr;
 }
