@@ -7,17 +7,17 @@ package interview.prepare;
 public class Tree {
     /**
      * Make a tree
-     *
-     *  A:                               B:
-     *        1                              15
-     *      /   \                           /    \
-     *     2     3                        6        18
-     *    / \   / \                      / \      /  \
-     *   4  5  6   7                    3   7    17   20
-     *  / \     \                      / \   \
+     * <p>
+     * A:                               B:
+     * 1                              15
+     * /   \                           /    \
+     * 2     3                        6        18
+     * / \   / \                      / \      /  \
+     * 4  5  6   7                    3   7    17   20
+     * / \     \                      / \   \
      * 8  9     10                    2   4   13
-     *                                        /
-     *                                       9
+     * /
+     * 9
      */
     public static void main(String[] args) {
         Tree tree = new Tree();
@@ -62,7 +62,7 @@ public class Tree {
         printResult(n, "Tree predecessor:");
 
         Node randomBST = new Node(0);
-        for (int i=1; i<10; i++) {
+        for (int i = 1; i < 10; i++) {
             tree.treeInsert(randomBST, new Node(i));
         }
         System.out.println("Random built BST and inorder tree walk to sort: ");
@@ -77,7 +77,7 @@ public class Tree {
     }
 
     Node makeTree(Node root, int height) {
-        if (height >0) {
+        if (height > 0) {
             root.left = new Node(root.key + 1);
             root.left.parent = root;
             root.right = new Node(root.key + 2);
@@ -147,14 +147,14 @@ public class Tree {
     }
 
     Node treeMinimun(Node n) {
-        while(n.left != null) {
+        while (n.left != null) {
             n = n.left;
         }
         return n;
     }
 
     Node treeMaximun(Node n) {
-        while(n.right!=null) {
+        while (n.right != null) {
             n = n.right;
         }
         return n;
@@ -173,7 +173,7 @@ public class Tree {
 
     Node iterativeTreeSearch(Node root, int key) {
         while (root != null && root.key != key) {
-            if (key < root.key){
+            if (key < root.key) {
                 root = root.left;
             } else {
                 root = root.right;
@@ -184,11 +184,12 @@ public class Tree {
 
     /**
      * Successor is the smallest key larger than n.key
+     *
      * @param n
      * @return
      */
     Node treeSuccessor(Node n) {
-        if(n.right != null) {
+        if (n.right != null) {
             return treeMinimun(n.right);
         }
         Node y = n.parent;
@@ -201,6 +202,7 @@ public class Tree {
 
     /**
      * Predecessor is the largest key smaller than n.key
+     *
      * @param n
      * @return
      */

@@ -1,65 +1,76 @@
-function findCCW(i, c, ccw, arr) {
-    var count = 1;
+function findCCW(i, cw, c, ccw, arr) {
+    var countj = 1, countk = 1;
+    var finishj = false, finishk = false;
     // console.log('range from ' + c + ' range to ' + ccw);
-    for (var j = i + 1; j != i && j != arr.length;) {
-        var v = arr[j][1] / arr[j][0];
-        var x = arr[j][0] * arr[i][0];
-        var y = arr[j][1] * arr[i][1];
-        if ((0 <= c <= 1 && x >= 0 ) || (c <= -1 && y >= 0)) {
-            if (c <= v && v <= ccw) {
-                // console.log('find point:', arr[j]);
-                count++;
-            } else {
-                break;
-            }
-        } else if ((c > 1 && y >= 0) || (-1 <= c <= 0 && x >= 0)) {
-            if (ccw >= v || v >= c) {
-                // console.log('find point:', arr[j]);
-                count++;
-            } else {
-                break;
+    for (var j = i + 1, k = i -1; j != arr.length && k >= 0;) {
+        var vj = arr[j][1] / arr[j][0];
+        var xj = arr[j][0] * arr[i][0];
+        var yj = arr[j][1] * arr[i][1];
+
+        var vk = arr[k][1] / arr[k][0];
+        var xk = arr[k][0] * arr[k][0];
+        var yk = arr[k][1] * arr[k][1];
+        if (! finishj) {
+            if ((0 <= c <= 1 && xj >= 0 ) || (c <= -1 && yj >= 0)) {
+                if (c <= vj && vj <= ccw) {
+                    // console.log('find point:', arr[j]);
+                    countj++;
+                } else {
+                    finishj = true;
+                }
+            } else if ((c > 1 && yj >= 0) || (-1 <= c <= 0 && xj >= 0)) {
+                if (ccw >= vj || vj >= c) {
+                    // console.log('find point:', arr[j]);
+                    countj++;
+                } else {
+                    finishj = true;
+                }
             }
         }
 
-        if (j < arr.length - 1) {
+        if (! finishk) {
+            if ((0 <= cw <= 1 && xk >= 0 ) || (cw <= -1 && yk >= 0)) {
+                if (cw <= vk && vk <= c) {
+                    // console.log('find point:', arr[j]);
+                    countk++;
+                } else {
+                    finishk = true;
+                }
+            } else if ((cw > 1 && yk >= 0) || (-1 <= cw <= 0 && xk >= 0)) {
+                if (c >= vk || vk >= cw) {
+                    // console.log('find point:', arr[j]);
+                    countk++;
+                } else {
+                    finishk = true;
+                }
+            }
+        }
+
+
+        if (j < arr.length - 1 && j != i ) {
             j++;
-        } else {
+        } else if (j != i) {
             j = 0;
-        }
-    }
-    return count;
-}
-
-function findCW(i, a, b, arr) {
-    var count = 1;
-    // console.log('range from ' + a + ' range to ' + b);
-    for (var j = i - 1; j != i && j >= 0;) {
-        var v = arr[j][1] / arr[j][0];
-        var x = arr[j][0] * arr[i][0];
-        var y = arr[j][1] * arr[i][1];
-        if ((0 <= a <= 1 && x >= 0 ) || (a <= -1 && y >= 0)) {
-            if (a <= v && v <= b) {
-                // console.log('find point:', arr[j]);
-                count++;
-            } else {
-                break;
-            }
-        } else if ((a > 1 && y >= 0) || (-1 <= a <= 0 && x >= 0)) {
-            if (b >= v || v >= a) {
-                // console.log('find point:', arr[j]);
-                count++;
-            } else {
-                break;
-            }
+        } else if (j == i) {
+            finishj = true;
         }
 
-        if (j > 0) {
-            j--;
-        } else {
-            j = arr.length - 1;
+        if (k > 0 && k != i) {
+            k--;
+        } else if (k != i){
+            k = arr.length - 1;
+        } else if (k == i){
+            finishk = true;
         }
+
+        if (j == i && k == i) break;
     }
-    return count;
+
+    if (countj > countk) {
+        return countj
+    } else {
+        return countk;
+    }
 }
 function visiblePoints(points) {
     var arr1 = [];
@@ -109,13 +120,7 @@ function visiblePoints(points) {
         }
         var rccw = getPreciseValue(Math.tan(Math.atan(currentTang) + Math.PI / 4));
         var rcw = getPreciseValue(Math.tan(Math.atan(currentTang) - Math.PI / 4));
-        var count = findCCW(i, currentTang, rccw, arr);
-        if (count > result) {
-            result = count;
-            // console.log('result ' + result);
-        }
-
-        var count = findCW(i, rcw, currentTang, arr);
+        var count = findCCW(i, rcw, currentTang, rccw, arr);
         if (count > result) {
             result = count;
             // console.log('result ' + result);
