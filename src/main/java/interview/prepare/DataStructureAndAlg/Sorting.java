@@ -1,4 +1,4 @@
-package interview.prepare;
+package interview.prepare.DataStructureAndAlg;
 
 import com.sun.org.apache.xpath.internal.operations.String;
 

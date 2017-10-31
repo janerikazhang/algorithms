@@ -1,9 +1,6 @@
-package interview.prepare;
+package interview.prepare.DataStructureAndAlg;
 
-/**
- * Created by Rika on 2017/10/24.
- */
-public class AmazonTreeTest {
+public class AmazonTreeInterview {
     class Node {
         int key;
         Node left;

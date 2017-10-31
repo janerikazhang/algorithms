@@ -1,4 +1,4 @@
-package interview.prepare;
+package interview.prepare.DataStructureAndAlg;
 
 import com.sun.org.apache.xpath.internal.operations.String;
 
@@ -7,6 +7,10 @@ import java.util.HashMap;
 
 /**
  * Created by Rika on 2017/9/18.
+ */
+
+/**
+ * Microsoft interview
  */
 public class CacheProgram {
     HashMap<String, Store> cache = new HashMap<>();

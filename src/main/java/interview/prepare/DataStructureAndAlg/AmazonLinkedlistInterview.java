@@ -1,6 +1,6 @@
-package interview.prepare;
+package interview.prepare.DataStructureAndAlg;
 
-public class AmazonLinkedlistTest {
+public class AmazonLinkedlistInterview {
 
     public static void main(String[] args) {
         Node LL = new Node(0);
