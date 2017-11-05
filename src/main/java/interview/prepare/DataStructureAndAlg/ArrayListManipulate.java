@@ -11,10 +11,22 @@ public class ArrayListManipulate {
     public static void main(String[] args) {
         ArrayListManipulate arrayListManipulate = new ArrayListManipulate();
 
-        int r = arrayListManipulate.findSecondLargestNumber(Arrays.asList(1,2,3,4,5,6,7));
+        int r = arrayListManipulate.findSecondLargestNumber(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
         System.out.println("Second largest number: " + r);
 
-        int r2 = arrayListManipulate.findRotateTimes(Arrays.asList(5,4,1,2,3));
+        r = arrayListManipulate.findSecondLargestNumber(Arrays.asList(7,6,5,4,3,2,1));
+        System.out.println("Second largest number: " + r);
+
+         r = arrayListManipulate.findSecondSmallestNumber(new int[] {0,1});
+        System.out.println("Second smallest number: " + r);
+
+        r = arrayListManipulate.findSecondSmallestNumber(new int[] {0});
+        System.out.println("Second smallest number: " + r);
+
+        r = arrayListManipulate.findSecondSmallestNumber(new int[] {2,4,1,1});
+        System.out.println("Second smallest number: " + r);
+
+        int r2 = arrayListManipulate.findRotateTimes(Arrays.asList(5, 4, 1, 2, 3));
         System.out.println("Rotate times: " + r2);
     }
 
@@ -28,11 +40,37 @@ public class ArrayListManipulate {
             } else if (i > largest) {
                 secondLargest = largest;
                 largest = i;
-            } else if (i <= largest && i > secondLargest) {
+            } else if (i < largest && i > secondLargest) {
+                secondLargest = i;
+            } else if (i < largest && secondLargest == largest) {
                 secondLargest = i;
             }
         }
         return secondLargest;
+    }
+
+    public int findSecondSmallestNumber(int[] a) {
+        Integer smallest = null;
+        Integer secondSmallest = null;
+
+        if (a.length < 2) {
+            return 0;
+        }
+
+        for (int i : a) {
+            if (smallest == null && secondSmallest == null) {
+                smallest = secondSmallest = i;
+            } else if (i < smallest) {
+                secondSmallest = smallest;
+                smallest = i;
+            } else if (i > smallest && i < secondSmallest) {
+                secondSmallest = i;
+            } else if (i > smallest && secondSmallest == smallest) {
+                secondSmallest = i;
+            }
+        }
+
+        return secondSmallest;
     }
 
     /**
@@ -49,6 +87,6 @@ public class ArrayListManipulate {
                 minIndex = i;
             }
         }
-        return  arr.size() - minIndex;
+        return arr.size() - minIndex;
     }
 }
