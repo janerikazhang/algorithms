@@ -37,44 +37,38 @@ public class Tree {
         tree.postOrderTreeWalk(rootA);
 
 
-        /**
-         * BST
-         * */
-        System.out.println("\n=====BST=========");
-        Node rootB = tree.makeTreeB();
-        Node n = tree.treeSearch(rootB, 7);
-        printResult(n, "Tree search:");
+        /* Driver program to test above functions */
+        tree.root = new Node(-15);
+        tree.root.left = new Node(5);
+        tree.root.right = new Node(6);
+        tree.root.left.left = new Node(-8);
+        tree.root.left.right = new Node(1);
+        tree.root.left.left.left = new Node(2);
+        tree.root.left.left.right = new Node(6);
+        tree.root.right.left = new Node(3);
+        tree.root.right.right = new Node(9);
+        tree.root.right.right.right = new Node(0);
+        tree.root.right.right.right.left = new Node(4);
+        tree.root.right.right.right.right = new Node(-1);
+        tree.root.right.right.right.right.left = new Node(10);
+        System.out.println("Max pathSum of the given binary tree is "
+                + tree.maxSumFromLeafToLeaf(tree.root));
 
-        n = tree.iterativeTreeSearch(rootB, 3);
-        printResult(n, "Iterative tree search:");
+        tree.root = new Node(10);
+        tree.root.left = new Node(2);
+        tree.root.right = new Node(10);
+        tree.root.left.left = new Node(20);
+        tree.root.left.right = new Node(1);
+        tree.root.right.right = new Node(-25);
+        tree.root.right.right.left = new Node(3);
+        tree.root.right.right.right = new Node(4);
+        System.out.println("maximum path sum is : " +
+                tree.maxSumFromNodeToNode(tree.root));
 
-        n = tree.treeMinimun(rootB);
-        printResult(n, "Tree mini:");
-
-        n = tree.treeMaximun(rootB);
-        printResult(n, "Tree Maximum:");
-
-        n = tree.treeSuccessor(rootB.left);
-        printResult(n, "Tree successor:");
-
-        System.out.println("node is " + rootB.right.left.key);
-        n = tree.treePredecessor(rootB.right.left);
-        printResult(n, "Tree predecessor:");
-
-        Node randomBST = new Node(0);
-        for (int i = 1; i < 10; i++) {
-            tree.treeInsert(randomBST, new Node(i));
-        }
-        System.out.println("Random built BST and inorder tree walk to sort: ");
-        tree.inOrderTreeWalk(randomBST);
     }
 
-    private static void printResult(Node n, String x) {
-        if (n != null)
-            System.out.println(x + " " + n.key);
-        else
-            System.out.println(x + " null");
-    }
+    Node root;
+
 
     Node makeTree(Node root, int height) {
         if (height > 0) {
@@ -110,139 +104,7 @@ public class Tree {
         return root;
     }
 
-    Node makeTreeB() {
-        Node root = new Node(15);
-        root.left = new Node(6);
-        root.left.parent = root;
-        root.right = new Node(18);
-        root.right.parent = root;
-
-        //next level
-        Node nextL = root.left;
-        nextL.left = new Node(3);
-        nextL.left.parent = nextL;
-        nextL.right = new Node(7);
-        nextL.right.parent = nextL;
-
-        Node nextR = root.right;
-        nextR.left = new Node(17);
-        nextR.left.parent = nextR;
-        nextR.right = new Node(20);
-        nextR.right.parent = nextR;
-
-        //next level
-        Node nextLL = nextL.left;
-        nextLL.left = new Node(2);
-        nextLL.left.parent = nextLL;
-        nextLL.right = new Node(4);
-        nextLL.right.parent = nextLL;
-
-        Node nextLR = nextL.right;
-        nextLR.right = new Node(13);
-        nextLR.right.parent = nextLR;
-        nextLR.right.left = new Node(9);
-        nextLR.right.parent = nextLR;
-
-        return root;
-    }
-
-    Node treeMinimun(Node n) {
-        while (n.left != null) {
-            n = n.left;
-        }
-        return n;
-    }
-
-    Node treeMaximun(Node n) {
-        while (n.right != null) {
-            n = n.right;
-        }
-        return n;
-    }
-
-    Node treeSearch(Node root, int key) {
-        if (root == null || root.key == key) {
-            return root;
-        }
-        if (key < root.key) {
-            return treeSearch(root.left, key);
-        } else {
-            return treeSearch(root.right, key);
-        }
-    }
-
-    Node iterativeTreeSearch(Node root, int key) {
-        while (root != null && root.key != key) {
-            if (key < root.key) {
-                root = root.left;
-            } else {
-                root = root.right;
-            }
-        }
-        return root;
-    }
-
-    /**
-     * Successor is the smallest key larger than n.key
-     *
-     * @param n
-     * @return
-     */
-    Node treeSuccessor(Node n) {
-        if (n.right != null) {
-            return treeMinimun(n.right);
-        }
-        Node y = n.parent;
-        while (y != null && n == y.right) {
-            n = y;
-            y = y.parent;
-        }
-        return y;
-    }
-
-    /**
-     * Predecessor is the largest key smaller than n.key
-     *
-     * @param n
-     * @return
-     */
-    Node treePredecessor(Node n) {
-        if (n.left != null) {
-            return treeMaximun(n.left);
-        }
-
-        Node y = n.parent;
-        while (y != null && n == y.left) {
-            n = y;
-            y = y.parent;
-        }
-        return y;
-    }
-
-    Node treeInsert(Node root, Node newNode) {
-        Node x = root;
-        Node y = null;
-        while (x != null) {
-            y = x;
-            if (newNode.key < x.key) {
-                x = x.left;
-            } else {
-                x = x.right;
-            }
-        }
-        newNode.parent = y;
-        if (y == null) {
-            root = newNode;//tree was empty;
-        } else if (newNode.key < y.key) {
-            y.left = newNode;
-        } else {
-            y.right = newNode;
-        }
-        return root;
-    }
-
-
-    void inOrderTreeWalk(Node root) {
+    public void inOrderTreeWalk(Node root) {
         if (root != null) {
             inOrderTreeWalk(root.left);
             System.out.print(root.key + "->");
@@ -266,11 +128,57 @@ public class Tree {
         }
     }
 
-    static class Node{
+    int maxSumLeafToLeaf = Integer.MIN_VALUE;
+
+    int maxSumNodeToNode = Integer.MIN_VALUE;
+
+    int maxSumFromLeafToLeafFunction(Node n) {
+        if (n == null) {
+            return 0;
+        }
+        if (n.left == null && n.right == null) {
+            return n.key;
+        }
+        int lresult = maxSumFromLeafToLeafFunction(n.left);
+        int rresult = maxSumFromLeafToLeafFunction(n.right);
+        if (n.left != null && n.right != null) {
+            maxSumLeafToLeaf = Math.max(maxSumLeafToLeaf, lresult + n.key + rresult);
+            return Math.max(lresult + n.key, rresult + n.key);
+        }
+        return n.left != null ? lresult + n.key : rresult + n.key;
+    }
+
+    int maxSumFromLeafToLeaf(Node n) {
+        maxSumFromLeafToLeafFunction(n);
+        return maxSumLeafToLeaf;
+    }
+
+    int maxSumFromNodeToNodeFunction(Node n) {
+        if (n == null) {
+            return 0;
+        }
+        int lresult = maxSumFromNodeToNodeFunction(n.left);
+        int rresult = maxSumFromNodeToNodeFunction(n.right);
+
+        int max_single = Math.max(Math.max(lresult, rresult) + n.key,
+                n.key);
+        int max_top = Math.max(max_single, lresult + rresult + n.key);
+
+        maxSumNodeToNode = Math.max(maxSumNodeToNode, max_top);
+        return max_single;
+    }
+
+    int maxSumFromNodeToNode(Node n) {
+        maxSumFromNodeToNodeFunction(n);
+        return maxSumNodeToNode;
+    }
+
+    static class Node {
         Node parent;
         Node left;
         Node right;
         int key;
+
         Node(int key) {
             this.key = key;
             left = null;
